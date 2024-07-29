@@ -17,22 +17,21 @@ export default function Post(){
     }
 
    async function handleForm(e){
-    try{ 
-        e.preventDefault();
-        let response= await axios.post("http://localhost:8888/post",input);
-        console.log(response)
-        if(response.status === 401){
-            console.log("not authenticated")
-          navigate("/login")
-        }
-        if(response.status === 201){
-         navigate("/");
-        }
-    }catch(err){
-        console.log(err.message);
+    try{ e.preventDefault();
+      let response= await axios.post("http://localhost:8888/post",input);
+      console.log(response,"form frontend");
+      if (response.status === 201) {
+      return navigate("/");
       }
+    }catch(err){
+         if(err.response.status === 500){
+          setError(err.response.data.message);
+         }
+      }
+       
     }
     return(<div>
+      {error &&(<div>{error}</div>)}
         <form onSubmit={handleForm}>
        
     <Box
